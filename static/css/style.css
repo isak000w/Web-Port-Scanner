@@ -1,0 +1,293 @@
+/* Global */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+h1, h2 {
+  margin-bottom: 0.5em;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+input[type=text],
+input[type=number],
+select,
+textarea {
+  padding: 4px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+}
+
+/* INDEX */
+
+#scanBtn {
+  background-color: #28a745;
+  color: white;
+  padding: 4px 8px;      /* slimmer */
+  font-size: 1em;
+  margin-top: 0.5em;
+}
+
+form div {
+  margin: 0.5em 0;
+}
+
+.output-console {
+  background: #111;
+  color: #0f0;
+  font-family: monospace;
+  padding: 10px;
+  height: 300px;
+  overflow-y: auto;
+  white-space: pre;
+  border: 1px solid #333;
+  margin-top: 1em;
+}
+
+.progress-container {
+  margin-top: 1em;
+}
+
+/* HISTORY */
+
+.filter-form {
+  margin-bottom: 1em;
+}
+.filter-form label,
+.filter-form input,
+.filter-form select {
+  margin-right: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+}
+table th,
+table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+table th {
+  background-color: #e9ecef;
+}
+tr:nth-child(even) {
+  background-color: #fdfdfd;
+}
+
+.export-buttons a,
+.export-buttons button {
+  margin-right: 5px;
+  padding: 2px 6px;
+  font-size: 0.9em;
+  background-color: #007bff;
+  color: #fff;
+}
+.export-buttons a:hover,
+.export-buttons button:hover {
+  background-color: #0056b3;
+}
+
+/* VIEW */
+
+.view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
+}
+.view-header .back-link,
+.view-header .history-link {
+  background-color: #007bff;
+  color: #fff;
+  padding: 4px 8px;
+  text-decoration: none;
+  border-radius: 4px;
+}
+.view-header .back-link:hover,
+.view-header .history-link:hover {
+  background-color: #0056b3;
+}
+
+.summary-section {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 1em;
+  background: #fff;
+}
+.summary-section h2 {
+  margin-top: 0;
+}
+.summary-item {
+  margin: 0.5em 0;
+}
+.summary-item span.label {
+  font-weight: bold;
+}
+.port-list {
+  list-style: none;
+  padding-left: 0;
+}
+.port-list li {
+  padding: 2px 0;
+}
+.scripts {
+  margin-top: 0.5em;
+}
+.script-item {
+  margin: 4px 0;
+}
+.expandable {
+  max-height: 3em;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: #f1f1f1;
+  padding: 6px;
+  border-radius: 3px;
+}
+.expandable.expanded {
+  max-height: 100vh;
+}
+.expand-toggle {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 0.9em;
+  color: #007bff;
+  cursor: pointer;
+}
+
+/* CMD box */
+
+#cmdBox {
+  width: 100%;
+  font-family: monospace;
+  margin-top: 0.5em;
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+/* Responsive */
+
+@media (max-width: 600px) {
+  .view-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  #scanBtn {
+    width: 100%;
+  }
+}
+
+/* limit height of collapsed sections: ~3 lines */
+.expandable {
+  max-height: 4.5em;
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+}
+
+/* when expanded, remove limit */
+.expandable.expanded {
+  max-height: none;
+}
+
+/* login page */
+body.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+.login-form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: .5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  width: 300px;
+}
+.login-form h2 {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.login-form div {
+  margin-bottom: .75rem;
+}
+.login-form label {
+  display: block;
+  margin-bottom: .25rem;
+  font-weight: 600;
+}
+.login-form input {
+  width: 100%;
+  padding: .5rem;
+  border: 1px solid #ccc;
+  border-radius: .25rem;
+}
+.login-form .btn-primary {
+  width: 100%;
+  padding: .5rem;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: .25rem;
+  cursor: pointer;
+}
+.flash-error {
+  background: #f8d7da;
+  color: #721c24;
+  padding: .5rem;
+  margin-bottom: .75rem;
+  border-radius: .25rem;
+  text-align: center;
+}
+
+/* Rescan button styling */
+#rescanBtn {
+  margin-left: 1rem;
+  padding: .5rem 1rem;
+  font-size: 1rem;
+}
+
+/* Progress bar container */
+.progress-container {
+  width: 100%;
+  background: #ddd;
+  border-radius: 4px;
+  margin: .5rem 0 1rem;
+  height: 1rem;
+  overflow: hidden;
+}
+
+/* The inner filling bar */
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: #4caf50;
+  transition: width 0.2s ease;
+}

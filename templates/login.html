@@ -1,0 +1,17 @@
+<!-- templates/login.html -->
+<form method="POST" action="{{ url_for('auth.login') }}">
+    <label>Username:
+      <input name="username" required>
+    </label>
+    <label>Password:
+      <input type="password" name="password" required>
+    </label>
+    <button type="submit">Log In</button>
+    {% with messages = get_flashed_messages(category_filter=['error']) %}
+      {% if messages %}
+        <ul class="errors">
+          {% for m in messages %}<li>{{ m }}</li>{% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+  </form>

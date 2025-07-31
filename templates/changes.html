@@ -1,0 +1,34 @@
+<!-- templates/changes.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Changes for Scan #{{ scan.id }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <h1>Service Changes for Scan #{{ scan.id }}</h1>
+  <p>
+    <a href="javascript:history.back()">← Back</a>
+    &nbsp;|&nbsp;
+    <a href="{{ url_for('history.history') }}">History</a>
+  </p>
+  {% if not changes %}
+    <p>No previous scan to compare against.</p>
+  {% else %}
+    <ul>
+      {% for c in changes %}
+        <li>
+          <strong>{{ c.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</strong><br>
+          {% if c.changes.added %}
+            <em>Added:</em> {{ c.changes.added }}<br>
+          {% endif %}
+          {% if c.changes.removed %}
+            <em>Removed:</em> {{ c.changes.removed }}
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</body>
+</html>

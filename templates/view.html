@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scan Report #{{ scan.id }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <!-- pull in Socket.IO client from CDN (no integrity tag) -->
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+  <h1>Scan Report #{{ scan.id }}</h1>
+  <div class="view-header">
+    <a href="javascript:history.back()" class="btn btn-secondary">← Back</a>
+    <button id="rescanBtn" class="btn btn-primary">Rescan</button>
+    <a href="{{ url_for('history.history') }}" class="btn btn-secondary">View History</a>
+  </div>
+
+  <section class="summary-section">
+    <div class="summary-item"><span class="label">Command:</span>
+      <code id="cmdBox">{{ cmd }}</code></div>
+    <div class="summary-item"><span class="label">Scanned At:</span>
+      {{ scan.timestamp.strftime("%Y-%m-%d %H:%M:%S") }}</div>
+  </section>
+
+  <!-- progress bar (hidden until rescan starts) -->
+  <div id="progressContainer" class="summary-section" style="display:none;">
+    <span class="label">Rescan Progress:</span>
+    <div class="progress">
+      <div id="progressBar" class="progress-bar" style="width:0%"></div>
+    </div>
+  </div>
+
+  {% for h in summary %}
+    <section class="summary-section">
+      <h2>Host: {{ h.ip or 'N/A' }}</h2>
+      <div class="summary-item"><span class="label">Hostname:</span> {{ h.hostname or '—' }}</div>
+      <div class="summary-item"><span class="label">MAC:</span> {{ h.mac or '—' }}</div>
+      <div class="summary-item">
+        <span class="label">OS:</span> {{ h.os.name or 'Unknown' }}
+        {% if h.os.accuracy %}(accuracy: {{ h.os.accuracy }}%) {% endif %}
+      </div>
+      <div class="summary-item">
+        <span class="label">Open Ports:</span>
+        <ul>
+          {% if h.open_ports %}
+            {% for p in h.open_ports %}
+              <li>
+                <strong>{{ p.port }}/{{ p.protocol }}</strong> – {{ p.service }} {{ p.version }}
+              </li>
+            {% endfor %}
+          {% else %}
+            <li>None</li>
+          {% endif %}
+        </ul>
+      </div>
+      {% if h.host_scripts %}
+        <div class="summary-item">
+          <span class="label">Host Scripts:</span>
+          <ul>
+            {% for s in h.host_scripts %}
+              <li><strong>{{ s.id }}:</strong> {{ s.output }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </section>
+  {% endfor %}
+
+  {% if changelog %}
+    <section class="summary-section">
+      <h2>Changes</h2>
+      <div class="change-box">{{ changelog.diff }}</div>
+    </section>
+  {% endif %}
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const rescanBtn       = document.getElementById('rescanBtn');
+      const progressCont    = document.getElementById('progressContainer');
+      const progressBar     = document.getElementById('progressBar');
+
+      rescanBtn.addEventListener('click', async () => {
+        rescanBtn.disabled = true;
+        progressCont.style.display = 'block';
+        progressBar.style.width = '0%';
+
+        // kick off rescan
+        const res = await fetch(`/view/rescan/{{ scan.id }}`, { method: 'POST' });
+        const { scan_id } = await res.json();
+
+        const socket = io();
+        socket.on('scan_progress', data => {
+          if (data.scan_id === scan_id && data.percent != null) {
+            progressBar.style.width = data.percent + '%';
+          }
+        });
+        socket.on('scan_complete', data => {
+          if (data.scan_id === scan_id) {
+            // reload into the newly completed scan page
+            window.location.href = `/view/${scan_id}`;
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!-- templates/manage_schedules.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Scheduled Scans</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <h1>Manage Scheduled Scans</h1>
+  <div id="banner" style="display:none;"></div>
+  <table class="table" id="schedules-table">
+    <thead>
+      <tr>
+        <th>Target</th>
+        <th>Ports</th>
+        <th>Flags</th>
+        <th>Date/Time</th>
+        <th>Repeat</th>
+        <th>Active</th>
+        <th>Next Run</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Rows will be rendered by JS -->
+    </tbody>
+  </table>
+  <a href="/" class="btn">Back to Home</a>
+  <script src="{{ url_for('static', filename='js/manage_schedules.js') }}"></script>
+</body>
+</html>

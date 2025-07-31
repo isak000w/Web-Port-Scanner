@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Web-Based Port Scanner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <h1>Web-Based Port Scanner</h1>
+  <form id="scanForm">
+    <div>
+      <label for="target">Target:</label>
+      <input type="text" id="target" name="target" required placeholder="IPv4, hostname or CIDR" pattern="^(?:\d{1,3}\.){3}\d{1,3}(?:\/\d{1,2})?$|^[0-9A-Fa-f:]+$">
+    </div>
+    <div>
+      <label for="ports">Ports:</label>
+      <input type="text" id="ports" name="ports" placeholder="e.g. 22,80 or 1-1024" pattern="^[0-9,\-\s]*$">
+    </div>
+    <div>
+      <label>Scan mode:</label>
+      <label><input type="radio" name="mode" value="Basic" checked> Basic</label>
+      <label><input type="radio" name="mode" value="Threaded"> Threaded</label>
+      <input type="number" id="threads" name="threads" min="1" max="10000" value="{{ default_threads }}" style="width:80px;">
+      <small>threads</small>
+    </div>
+    <div>
+      <label for="presetSelect">Scan flags:</label>
+      <select id="presetSelect" name="preset">
+        <option value="">No extra flags</option>
+        <option value="-sV -T4">Version detection (T4)</option>
+        <option value="-O">OS detection</option>
+        <option value="-A">Aggressive</option>
+        <option value="-sV -sC -T4">Default scripts & version</option>
+        <option value="custom">Custom…</option>
+      </select>
+      <input type="text" id="customFlags" name="custom_flags" placeholder="Custom flags" style="display:none; width:200px;">
+    </div>
+
+
+    <div>
+      <label for="nmapCmd">Nmap CMD:</label>
+      <input type="text" id="nmapCmd" readonly style="width:100%; font-family:monospace;">
+    </div>
+
+    <button type="submit" id="scanBtn" class="btn-primary">Start Scan</button>
+
+  </form>
+
+  <div class="console" id="consoleArea"></div>
+  <progress id="progress" value="0" max="100" style="width:100%; display:none;"></progress>
+
+  <!-- Schedule Scan Form -->
+  <form id="schedule-form" style="margin-top:2rem;">
+    <h3>Schedule Scan</h3>
+    <div>
+      <label>Target:</label>
+      <input type="text" name="target" required>
+    </div>
+    <div>
+      <label>Ports:</label>
+      <input type="text" name="ports">
+    </div>
+    <div>
+      <label>Mode:</label>
+      <select name="mode">
+        <option>Basic</option>
+        <option>Threaded</option>
+      </select>
+      <input type="number" name="threads" placeholder="Threads" value="{{ default_threads }}">
+    </div>
+    <div>
+      <label>Flags:</label>
+      <input type="text" name="flags" placeholder="e.g. -sV -sC">
+    </div>
+    <div>
+      <label>Run at:</label>
+      <input type="datetime-local" name="run_at" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Schedule</button>
+    <div id="schedule-result" style="margin-top:1rem;"></div>
+  </form>
+
+  <div class="progress-container">
+    <progress id="progress" value="0" max="100" style="width:100%; display:none;"></progress>
+  </div>
+
+  <pre id="output" class="output-console"></pre>
+
+  <div class="nav-links">
+    <a href="{{ url_for('history.history') }}" class="btn-secondary">View Scan History</a>
+    <a href="{{ url_for('schedule.manage_schedules') }}" class="btn">Manage Scheduled Scans</a>
+  </div>
+
+  <script src="https://cdn.socket.io/4.5.1/socket.io.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

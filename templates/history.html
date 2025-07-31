@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scan History</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <h1>Scan History</h1>
+
+  <table class="history-table">
+
+  <form method="get" class="filter-form">
+    <div class="filter-group">
+      <!-- TARGET search box -->
+      <label for="target">Target:</label>
+      <input type="text" id="target" name="target" placeholder="e.g. 192.168.1.1"
+             value="{{ request.args.get('target','') }}">
+    </div>
+    <div class="filter-group">
+      <label for="mode">Mode:</label>
+      <select id="mode" name="mode">
+        <option value=""      {% if not request.args.get('mode') %}selected{% endif %}>All</option>
+        <option value="Basic" {% if request.args.get('mode')=='Basic' %}selected{% endif %}>Basic</option>
+        <option value="Threaded"{% if request.args.get('mode')=='Threaded' %}selected{% endif %}>Threaded</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="start_date">Start Date:</label>
+      <input type="date" id="start_date" name="start_date"
+             value="{{ request.args.get('start_date','') }}">
+    </div>
+    <div class="filter-group">
+      <label for="end_date">End Date:</label>
+      <input type="date" id="end_date" name="end_date"
+             value="{{ request.args.get('end_date','') }}">
+    </div>
+    <button type="submit" class="btn">Filter</button>
+    <a href="{{ url_for('history.history') }}" class="btn btn-secondary">Clear</a>
+  </form>
+        <th>Target</th>
+        <th>Mode</th>
+        <th>Flags</th>
+        <th>Status</th>
+        <th>When</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for scan in scans %}
+        <tr>
+          <td>{{ scan.id }}</td>
+          <td>{{ scan.target }}</td>
+          <td>{{ scan.mode }}</td>
+          <td><code>{{ scan.flags or '–' }}</code></td>
+          <td>{{ scan.status }}</td>
+          <td>{{ scan.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          <td class="actions">
+            <a href="{{ url_for('view.view_scan', scan_id=scan.id) }}"
+               class="btn btn-small">View</a>
+
+            <form method="post"
+                  action="{{ url_for('history.rescan', scan_id=scan.id) }}"
+                  style="display:inline">
+              <button type="submit" class="btn btn-small btn-blue">
+                Rescan
+              </button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <p>
+    <a href="{{ url_for('main.index') }}" class="btn btn-link">← Back to Scanner</a>
+  </p>
+</body>
+</html>
