@@ -9,7 +9,7 @@ A self-hosted Flask application that leverages Nmap under the hood to perform on
 - **Scan History**: Persisted SQLite history of past scans with filters by target, mode, date range  
 - **Detailed Reports**: Per-host breakdown—OS guess, hostname, MAC, open ports, service versions, NSE script output  
 - **Export Results**: Download your scan as JSON, CSV or plain text  
-- **Role-Based Access**: Optional login page with user/role support to lock down scans  
+- **Role-Based Access**: Optional login page with user/role support to lock down scans (Default user:pass is admin:pass) 
 - **Scheduled Scans**: Create, modify, cancel recurring or one-off scans from the UI, with calendar picker and weekday checkboxes  
 
 ## Setup
